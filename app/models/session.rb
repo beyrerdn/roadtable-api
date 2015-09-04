@@ -16,21 +16,26 @@ class Session
       point_hash = { latitude: points[i].first, longitude: points[i].last }
 
       # Returns BurstStruct object that Yelp creates
+
+      ##Find out how to make the search return unique##
       point_results = Yelp.client.search_by_coordinates(point_hash, { limit: 5 })
 
       # Reformat that Yelp object into hash with only the data we need
       point_results.businesses.each do |restaurant|
-        self.restaurants << {
-          name: restaurant.name,
-          rating: restaurant.rating,
-          display_phone: restaurant.respond_to?(:display_phone) ? restaurant.phone : "",
-          categories: restaurant.respond_to?(:categories) ? categories_to_string(restaurant.categories) : "",
-          mobile_url: restaurant.respond_to?(:mobile_url) ? restaurant.mobile_url : "",
-          rating_img_url: restaurant.respond_to?(:rating_img_url) ? restaurant.rating_img_url : "",
-          image_url: restaurant.respond_to?(:image_url) ? restaurant.image_url : "",
-          display_address: restaurant.respond_to?(:display_address) ? restaurant.display_address : "",
-          mobile_url: restaurant.respond_to?(:mobile_url) ? restaurant.mobile_url : ""
-        }
+        unless self.restaurants.include?(restaurant.id)
+          self.restaurants << {
+            name: restaurant.name,
+            rating: restaurant.rating,
+            display_phone: restaurant.respond_to?(:display_phone) ? restaurant.phone : "",
+            categories: restaurant.respond_to?(:categories) ? categories_to_string(restaurant.categories) : "",
+            mobile_url: restaurant.respond_to?(:mobile_url) ? restaurant.mobile_url : "",
+            rating_img_url: restaurant.respond_to?(:rating_img_url) ? restaurant.rating_img_url : "",
+            image_url: restaurant.respond_to?(:image_url) ? restaurant.image_url : "",
+            display_address: restaurant.respond_to?(:display_address) ? restaurant.display_address : "",
+            mobile_url: restaurant.respond_to?(:mobile_url) ? restaurant.mobile_url : "",
+            id: restaurant.respond_to?(:id) ? restaurant.id : ""
+          }
+        end
       end
       i += increment
     end
