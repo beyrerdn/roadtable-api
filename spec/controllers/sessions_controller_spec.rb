@@ -14,7 +14,7 @@ RSpec.describe SessionsController, type: :controller do
     end
     it 'gives a json response containing restaurant array' do
       post :create, { origin: "Indianapolis", destination: "Chicago", api_key: "1" }
-      expect_json_types(restaurants: :array)
+      expect_json_dtypes(restaurants: :array)
     end
     it 'does not create a session object without an api_key' do
       Session.all.destroy_all
